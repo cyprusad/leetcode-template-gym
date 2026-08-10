@@ -17,14 +17,6 @@ Do this for ~15–25 minutes before your normal LeetCode practice:
 The point is **not** to solve a Medium. The problem and signature are already given.
 You're drilling the mechanical skeleton: initialize → loop/recurse → invariant → update → return.
 
-## Recommended 8-day routine
-
-- Days 1–2: 5 core drills, untimed enough to be correct.
-- Days 3–4: 6 drills, target ~3 min each.
-- Days 5–6: 6 drills, target ~2 min each.
-- Day 7: 8-drill "gauntlet"; redo every miss.
-- Day 8: 4–5 easy confidence reps, then actual interview-style problems.
-
 After the gym, do your normal LeetCode work. The gym trains **implementation recall**;
 LeetCode trains **pattern recognition + problem solving**.
 

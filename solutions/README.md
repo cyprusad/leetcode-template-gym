@@ -1,8 +1,10 @@
 # Solutions
 
-Keep your own canonical templates here.
-
 The drill files intentionally contain TODOs rather than answers. After a miss,
-compare against your preferred canonical template, then close it and rewrite the
-pattern cold. Your previously generated NeetCode-style template sheet can also
-serve as the answer key.
+rewrite the pattern from memory and keep the solution grounded in the drill
+itself.
+
+Example reference for a fixed-length sliding window template:
+https://www.hellointerview.com/learn/code/sliding-window/fixed-length
+
+![Fixed-length sliding window template example](assets/fixed-length-sliding-window-template.png)
