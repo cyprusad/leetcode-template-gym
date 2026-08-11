@@ -35,6 +35,28 @@ LeetCode trains **pattern recognition + problem solving**.
 
 No dependencies. Python 3.10+ recommended.
 
+## Web app
+
+A static browser version now lives under [`web/`](./web).
+
+It reuses the same drill files, runs them in-browser with Pyodide, and provides:
+
+- separate normal and advanced buckets
+- drag-and-drop reordering and re-bucketing
+- Monaco editor + xterm terminal layout
+- random pick flow with a 3-second countdown and visible timer
+- local analytics for solve attempts
+
+Build it with:
+
+```bash
+cd web
+npm install
+npm run build
+```
+
+Deployment details for a VPS + Cloudflare setup are in [`web/README.md`](./web/README.md).
+
 ## Patterns included
 
 Normal:

@@ -18,5 +18,9 @@ coverage.xml
 htmlcov/
 dist/
 build/
+node_modules/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
 *.egg-info/
 .ipynb_checkpoints/
