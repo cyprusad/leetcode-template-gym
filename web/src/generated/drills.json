@@ -1,0 +1,202 @@
+[
+  {
+    "id": "advanced:dp_1d",
+    "slug": "dp_1d",
+    "title": "1-D DP",
+    "mode": "advanced",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: 1-D DP. Target: <= 2 minutes.\"\"\"\ndef house_robber(nums):\n    # TODO: max non-adjacent sum; preferably O(1) extra space.\n    pass\n\nassert house_robber([1,2,3,1]) == 4\nassert house_robber([2,7,9,3,1]) == 12\nassert house_robber([]) == 0\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "advanced:dp_grid",
+    "slug": "dp_grid",
+    "title": "2-D/grid DP",
+    "mode": "advanced",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: 2-D/grid DP. Target: <= 2 minutes.\"\"\"\ndef unique_paths(m, n):\n    # TODO: move only right/down. Return number of paths.\n    pass\n\nassert unique_paths(3, 7) == 28\nassert unique_paths(1, 5) == 1\nassert unique_paths(2, 2) == 2\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "advanced:union_find",
+    "slug": "union_find",
+    "title": "Union-Find / DSU",
+    "mode": "advanced",
+    "targetSeconds": 180,
+    "source": "\"\"\"DRILL: Union-Find / DSU. Target: <= 3 minutes.\"\"\"\nclass DSU:\n    def __init__(self, n):\n        # TODO\n        pass\n\n    def find(self, x):\n        # TODO: path compression\n        pass\n\n    def union(self, a, b):\n        # TODO: union by rank/size; return False if already connected.\n        pass\n\nd = DSU(5)\nassert d.union(0,1) is True\nassert d.union(1,2) is True\nassert d.find(0) == d.find(2)\nassert d.union(0,2) is False\nassert d.find(3) != d.find(0)\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:backtracking_combinations",
+    "slug": "backtracking_combinations",
+    "title": "Combination backtracking with start index",
+    "mode": "normal",
+    "targetSeconds": 180,
+    "source": "\"\"\"DRILL: Combination backtracking with start index. Target: <= 3 minutes.\"\"\"\ndef combinations(nums, k):\n    # TODO: choose k values, preserving input index order.\n    pass\n\nout = combinations([1,2,3,4], 2)\nassert len(out) == 6\nassert [1,2] in out and [3,4] in out\nassert combinations([1,2], 0) == [[]]\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:backtracking_permutations",
+    "slug": "backtracking_permutations",
+    "title": "Permutations backtracking",
+    "mode": "normal",
+    "targetSeconds": 180,
+    "source": "\"\"\"DRILL: Permutations backtracking. Target: <= 3 minutes.\"\"\"\ndef permutations(nums):\n    # TODO: choose unused -> append -> recurse -> pop/unchoose.\n    pass\n\nout = permutations([1,2,3])\nassert len(out) == 6\nassert [1,2,3] in out and [3,2,1] in out\nassert permutations([]) == [[]]\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:backtracking_subsets",
+    "slug": "backtracking_subsets",
+    "title": "Choose / recurse / undo",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Choose / recurse / undo. Target: <= 2 minutes.\"\"\"\ndef subsets(nums):\n    # TODO: classic backtracking; return all subsets.\n    pass\n\nout = subsets([1,2,3])\nassert len(out) == 8\nassert [] in out and [1,2,3] in out and [2] in out\nassert subsets([]) == [[]]\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:binary_search_first_true",
+    "slug": "binary_search_first_true",
+    "title": "Binary search on answer / first True",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Binary search on answer / first True. Target: <= 2 minutes.\"\"\"\ndef first_true(lo, hi, condition):\n    # TODO: inclusive [lo, hi]. Return first x satisfying condition, or -1.\n    pass\n\nassert first_true(0, 10, lambda x: x >= 6) == 6\nassert first_true(0, 0, lambda x: True) == 0\nassert first_true(0, 5, lambda x: False) == -1\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:binary_search",
+    "slug": "binary_search",
+    "title": "Exact binary search",
+    "mode": "normal",
+    "targetSeconds": 90,
+    "source": "\"\"\"DRILL: Exact binary search. Target: <= 90 seconds.\"\"\"\ndef binary_search(nums, target):\n    # TODO: O(log n). Return index, else -1.\n    pass\n\nassert binary_search([], 3) == -1\nassert binary_search([5], 5) == 0\nassert binary_search([1,3,5,7,9], 7) == 3\nassert binary_search([1,3,5,7,9], 4) == -1\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:fast_slow_pointers",
+    "slug": "fast_slow_pointers",
+    "title": "Linked-list fast/slow pointers",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Linked-list fast/slow pointers. Target: <= 2 minutes.\"\"\"\nclass ListNode:\n    def __init__(self, val, next=None):\n        self.val, self.next = val, next\n\ndef has_cycle(head):\n    # TODO: Floyd's tortoise/hare.\n    pass\n\na = ListNode(1); b = ListNode(2); c = ListNode(3)\na.next=b; b.next=c\nassert has_cycle(a) is False\nc.next=b\nassert has_cycle(a) is True\nassert has_cycle(None) is False\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:graph_bfs",
+    "slug": "graph_bfs",
+    "title": "Graph BFS adjacency list",
+    "mode": "normal",
+    "targetSeconds": 90,
+    "source": "\"\"\"DRILL: Graph BFS adjacency list. Target: <= 90 seconds.\"\"\"\ndef bfs_distances(graph, start):\n    # TODO: shortest unweighted distance from start; return dict.\n    pass\n\ng = {0:[1,2], 1:[3], 2:[3], 3:[], 4:[]}\nassert bfs_distances(g, 0) == {0:0,1:1,2:1,3:2}\nassert bfs_distances(g, 4) == {4:0}\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:graph_dfs",
+    "slug": "graph_dfs",
+    "title": "Graph DFS adjacency list",
+    "mode": "normal",
+    "targetSeconds": 90,
+    "source": "\"\"\"DRILL: Graph DFS adjacency list. Target: <= 90 seconds.\"\"\"\ndef dfs(graph, start):\n    # TODO: iterative or recursive; return set of reachable nodes.\n    pass\n\ng = {0:[1,2], 1:[2], 2:[3], 3:[], 4:[]}\nassert dfs(g, 0) == {0,1,2,3}\nassert dfs(g, 4) == {4}\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:grid_bfs",
+    "slug": "grid_bfs",
+    "title": "Grid BFS shortest path",
+    "mode": "normal",
+    "targetSeconds": 180,
+    "source": "\"\"\"DRILL: Grid BFS shortest path. Target: <= 3 minutes.\"\"\"\ndef shortest_path(grid, start, end):\n    # TODO: 0=open, 1=blocked; 4 dirs. Return edge distance, else -1.\n    pass\n\ng = [\n    [0,0,1],\n    [1,0,0],\n    [0,0,0],\n]\nassert shortest_path(g, (0,0), (2,2)) == 4\nassert shortest_path([[0,1],[1,0]], (0,0), (1,1)) == -1\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:grid_dfs",
+    "slug": "grid_dfs",
+    "title": "Grid DFS + visited",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Grid DFS + visited. Target: <= 2 minutes.\"\"\"\ndef count_islands(grid):\n    # TODO: 4-directional islands of \"1\". You may mutate grid or use visited.\n    pass\n\nassert count_islands([\n    [\"1\",\"1\",\"0\"],\n    [\"0\",\"1\",\"0\"],\n    [\"1\",\"0\",\"1\"],\n]) == 3\nassert count_islands([]) == 0\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:heap_top_k",
+    "slug": "heap_top_k",
+    "title": "Heap / top-K",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Heap / top-K. Target: <= 2 minutes.\"\"\"\ndef k_largest(nums, k):\n    # TODO: maintain a min-heap of size k; return values sorted descending.\n    pass\n\nassert k_largest([3,2,1,5,6,4], 2) == [6,5]\nassert k_largest([1], 1) == [1]\nassert k_largest([4,4,2,9], 3) == [9,4,4]\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:linked_list_reverse",
+    "slug": "linked_list_reverse",
+    "title": "Iterative linked-list reversal",
+    "mode": "normal",
+    "targetSeconds": 90,
+    "source": "\"\"\"DRILL: Iterative linked-list reversal. Target: <= 90 seconds.\"\"\"\nclass ListNode:\n    def __init__(self, val, next=None):\n        self.val, self.next = val, next\n\ndef reverse(head):\n    # TODO\n    pass\n\ndef vals(head):\n    out = []\n    while head:\n        out.append(head.val); head = head.next\n    return out\n\nh = ListNode(1, ListNode(2, ListNode(3)))\nassert vals(reverse(h)) == [3,2,1]\nassert reverse(None) is None\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:monotonic_stack",
+    "slug": "monotonic_stack",
+    "title": "Monotonic stack",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Monotonic stack. Target: <= 2 minutes.\"\"\"\ndef next_greater(nums):\n    # TODO: for each index, next greater VALUE to its right, else -1.\n    pass\n\nassert next_greater([2,1,2,4,3]) == [4,2,4,-1,-1]\nassert next_greater([5,4,3]) == [-1,-1,-1]\nassert next_greater([]) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:prefix_sum_hashmap",
+    "slug": "prefix_sum_hashmap",
+    "title": "Prefix sum + frequency hashmap",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Prefix sum + frequency hashmap. Target: <= 2 minutes.\"\"\"\ndef subarray_sum(nums, k):\n    # TODO: count contiguous subarrays summing to k.\n    pass\n\nassert subarray_sum([1,1,1], 2) == 2\nassert subarray_sum([1,2,3], 3) == 2\nassert subarray_sum([1,-1,0], 0) == 3\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:sliding_window_fixed",
+    "slug": "sliding_window_fixed",
+    "title": "Fixed-size sliding window",
+    "mode": "normal",
+    "targetSeconds": 90,
+    "source": "\"\"\"DRILL: Fixed-size sliding window. Target: <= 90 seconds.\"\"\"\ndef max_sum_k(nums, k):\n    # TODO: max sum of any contiguous window of exactly k.\n    pass\n\nassert max_sum_k([1,4,2,10,2,3,1,0,20], 4) == 24\nassert max_sum_k([5], 1) == 5\nassert max_sum_k([-5,-2,-8], 2) == -7\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:sliding_window_variable",
+    "slug": "sliding_window_variable",
+    "title": "Variable sliding window",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Variable sliding window. Target: <= 2 minutes.\"\"\"\ndef longest_unique(s):\n    # TODO: longest substring with no repeated chars.\n    pass\n\nassert longest_unique(\"\") == 0\nassert longest_unique(\"abcabcbb\") == 3\nassert longest_unique(\"bbbbb\") == 1\nassert longest_unique(\"pwwkew\") == 3\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:topological_sort",
+    "slug": "topological_sort",
+    "title": "Kahn topological sort",
+    "mode": "normal",
+    "targetSeconds": 180,
+    "source": "\"\"\"DRILL: Kahn topological sort. Target: <= 3 minutes.\"\"\"\ndef topo_sort(n, edges):\n    # TODO: edges are (u,v): u must come before v. Return [] on cycle.\n    pass\n\norder = topo_sort(4, [(0,1),(0,2),(1,3),(2,3)])\nassert len(order) == 4\npos = {x:i for i,x in enumerate(order)}\nassert pos[0] < pos[1] and pos[0] < pos[2]\nassert pos[1] < pos[3] and pos[2] < pos[3]\nassert topo_sort(2, [(0,1),(1,0)]) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:tree_iterative_dfs",
+    "slug": "tree_iterative_dfs",
+    "title": "Iterative tree DFS with stack",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Iterative tree DFS with stack. Target: <= 2 minutes.\"\"\"\nclass Node:\n    def __init__(self, val, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\ndef preorder(root):\n    # TODO: iterative root-left-right. Remember stack ordering.\n    pass\n\nroot = Node(1, Node(2, Node(4), Node(5)), Node(3))\nassert preorder(root) == [1,2,4,5,3]\nassert preorder(None) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:tree_level_order_bfs",
+    "slug": "tree_level_order_bfs",
+    "title": "Tree level-order BFS",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Tree level-order BFS. Target: <= 2 minutes.\"\"\"\nclass Node:\n    def __init__(self, val, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\ndef level_order(root):\n    # TODO: return [[level0], [level1], ...].\n    pass\n\nroot = Node(1, Node(2, Node(4)), Node(3))\nassert level_order(root) == [[1],[2,3],[4]]\nassert level_order(None) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:tree_recursive_dfs",
+    "slug": "tree_recursive_dfs",
+    "title": "Recursive tree DFS",
+    "mode": "normal",
+    "targetSeconds": 90,
+    "source": "\"\"\"DRILL: Recursive tree DFS. Target: <= 90 seconds.\"\"\"\nclass Node:\n    def __init__(self, val, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\ndef preorder(root):\n    # TODO: recursive root-left-right.\n    pass\n\nroot = Node(1, Node(2, Node(4), Node(5)), Node(3))\nassert preorder(root) == [1,2,4,5,3]\nassert preorder(None) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:trie",
+    "slug": "trie",
+    "title": "Trie insert/search/prefix",
+    "mode": "normal",
+    "targetSeconds": 240,
+    "source": "\"\"\"DRILL: Trie insert/search/prefix. Target: <= 4 minutes.\"\"\"\nclass TrieNode:\n    def __init__(self):\n        # TODO\n        pass\n\nclass Trie:\n    def __init__(self):\n        # TODO\n        pass\n\n    def insert(self, word):\n        # TODO\n        pass\n\n    def search(self, word):\n        # TODO\n        pass\n\n    def starts_with(self, prefix):\n        # TODO\n        pass\n\nt = Trie()\nt.insert(\"apple\")\nassert t.search(\"apple\") is True\nassert t.search(\"app\") is False\nassert t.starts_with(\"app\") is True\nt.insert(\"app\")\nassert t.search(\"app\") is True\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:two_pointers",
+    "slug": "two_pointers",
+    "title": "Opposite-direction two pointers",
+    "mode": "normal",
+    "targetSeconds": 90,
+    "source": "\"\"\"DRILL: Opposite-direction two pointers. Target: <= 90 seconds.\"\"\"\ndef pair_sum_sorted(nums, target):\n    # TODO: sorted nums. Return (left_index, right_index), else None.\n    pass\n\nassert pair_sum_sorted([1,2,4,7,11], 9) == (1,3)\nassert pair_sum_sorted([1,2], 10) is None\nassert pair_sum_sorted([-3,-1,2,5], 1) == (1,2)\nprint(\"PASS\")\n"
+  }
+]
