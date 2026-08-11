@@ -86,6 +86,11 @@ Backtracking / data structures:
 - Combination-style backtracking
 - Trie
 
+Intervals:
+- Merge intervals / overlap scan
+- Insert interval / three-position scan
+- Interval intersection / two sorted lists
+
 Advanced:
 - 1-D DP
 - 2-D grid DP
@@ -99,3 +104,32 @@ constructs yourself.
 
 If you fail a drill, immediately rewrite it once from a fresh file. That second rep is where
 the pattern tends to stick.
+
+## Adding A Drill
+
+The repo is set up so one drill file powers both the CLI and the web app.
+
+Workflow:
+
+1. Add a new single-file drill under:
+   - `gym/drills/normal/` or
+   - `gym/drills/advanced/`
+2. Follow the existing format:
+   - first-line docstring: `"""DRILL: Name. Target: <= N minutes."""`
+   - one function or class skeleton with `# TODO`
+   - a few top-level `assert` tests
+   - final `print("PASS")`
+3. Keep the tests small and mechanical. The drill should reinforce a template, not require heavy problem-solving.
+4. Run the file directly to verify it passes once implemented:
+   - `python gym/drills/normal/<name>.py`
+5. If you changed the drill catalog, regenerate the web manifest:
+   - `cd web && node ./scripts/generate-drills.mjs`
+6. If you touched the web app itself, rebuild it:
+   - `cd web && npm run build`
+
+Heuristic for a good drill:
+
+- one pattern
+- one core invariant
+- 3 to 6 assertions
+- runnable in roughly 60 to 180 seconds from memory

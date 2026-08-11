@@ -112,12 +112,36 @@
     "source": "\"\"\"DRILL: Heap / top-K. Target: <= 2 minutes.\"\"\"\ndef k_largest(nums, k):\n    # TODO: maintain a min-heap of size k; return values sorted descending.\n    pass\n\nassert k_largest([3,2,1,5,6,4], 2) == [6,5]\nassert k_largest([1], 1) == [1]\nassert k_largest([4,4,2,9], 3) == [9,4,4]\nprint(\"PASS\")\n"
   },
   {
+    "id": "normal:insert_interval",
+    "slug": "insert_interval",
+    "title": "Insert interval / three-position scan",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Insert interval / three-position scan. Target: <= 2 minutes.\"\"\"\ndef insert_interval(intervals, new_interval):\n    # TODO: append left intervals, merge overlaps, then append the rest.\n    pass\n\nassert insert_interval([], [2,5]) == [[2,5]]\nassert insert_interval([[1,3],[6,9]], [2,5]) == [[1,5],[6,9]]\nassert insert_interval([[1,2],[3,5],[6,7],[8,10],[12,16]], [4,8]) == [[1,2],[3,10],[12,16]]\nassert insert_interval([[1,5]], [6,8]) == [[1,5],[6,8]]\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:interval_intersection",
+    "slug": "interval_intersection",
+    "title": "Interval intersection / two sorted lists",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Interval intersection / two sorted lists. Target: <= 2 minutes.\"\"\"\ndef interval_intersection(a, b):\n    # TODO: two pointers; intersect inward with max(start), min(end).\n    pass\n\nassert interval_intersection([], [[1,3]]) == []\nassert interval_intersection([[1,3]], []) == []\nassert interval_intersection([[0,2],[5,10],[13,23],[24,25]], [[1,5],[8,12],[15,24],[25,26]]) == [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]\nassert interval_intersection([[1,7]], [[3,10]]) == [[3,7]]\nprint(\"PASS\")\n"
+  },
+  {
     "id": "normal:linked_list_reverse",
     "slug": "linked_list_reverse",
     "title": "Iterative linked-list reversal",
     "mode": "normal",
     "targetSeconds": 90,
     "source": "\"\"\"DRILL: Iterative linked-list reversal. Target: <= 90 seconds.\"\"\"\nclass ListNode:\n    def __init__(self, val, next=None):\n        self.val, self.next = val, next\n\ndef reverse(head):\n    # TODO\n    pass\n\ndef vals(head):\n    out = []\n    while head:\n        out.append(head.val); head = head.next\n    return out\n\nh = ListNode(1, ListNode(2, ListNode(3)))\nassert vals(reverse(h)) == [3,2,1]\nassert reverse(None) is None\nprint(\"PASS\")\n"
+  },
+  {
+    "id": "normal:merge_intervals",
+    "slug": "merge_intervals",
+    "title": "Merge intervals / overlap scan",
+    "mode": "normal",
+    "targetSeconds": 120,
+    "source": "\"\"\"DRILL: Merge intervals / overlap scan. Target: <= 2 minutes.\"\"\"\ndef merge_intervals(intervals):\n    # TODO: sort by start, then merge overlaps. Return merged intervals.\n    pass\n\nassert merge_intervals([]) == []\nassert merge_intervals([[1,3]]) == [[1,3]]\nassert merge_intervals([[1,3],[2,6],[8,10],[15,18]]) == [[1,6],[8,10],[15,18]]\nassert merge_intervals([[1,4],[4,5]]) == [[1,5]]\nassert merge_intervals([[5,7],[1,2],[2,4]]) == [[1,4],[5,7]]\nprint(\"PASS\")\n"
   },
   {
     "id": "normal:monotonic_stack",
