@@ -49,6 +49,10 @@
   --page-scrollbar-track: #0f111a;
   --page-scrollbar-thumb: #313244;
   --page-scrollbar-thumb-hover: #45475a;
+  --brand-accent: #ff5a0a;
+  --brand-yellow: #ffc62c;
+  --brand-wordmark: #f5e0dc;
+  --brand-secondary: #a6adc8;
 }
 
 * {
@@ -129,13 +133,13 @@ button {
 .topbar {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
   margin-bottom: 8px;
   padding: 4px 0 8px;
 }
 
-.topbar h1,
 .panel-head h2,
 .bucket-header h2,
 .stats-card h3 {
@@ -143,33 +147,57 @@ button {
   color: var(--heading-text);
 }
 
-.topbar p,
-.topbar h1 {
-  color: var(--heading-text);
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
-.topbar h1 {
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.brand-copy {
+  min-width: 0;
+}
+
+.brand-wordmark,
+.brand-subline {
   font-family:
-    Inter,
+    "Trebuchet MS",
+    "Avenir Next",
     ui-sans-serif,
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  font-size: 1.25rem;
-  line-height: 1.2;
-  font-weight: 650;
+}
+
+.brand-wordmark {
+  color: var(--brand-wordmark);
+  font-size: 1.2rem;
+  line-height: 1.05;
+  font-weight: 750;
   letter-spacing: -0.025em;
 }
 
-.eyebrow {
-  margin: 0 0 4px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 11px;
+.brand-subline {
+  margin-top: 3px;
+  color: var(--brand-secondary);
+  font-size: 10px;
+  line-height: 1.1;
   font-weight: 600;
-  color: var(--eyebrow);
+  letter-spacing: 0.015em;
+}
+
+.brand-dot,
+.brand-code {
+  color: var(--brand-accent);
 }
 
 .topbar-controls {
@@ -486,6 +514,8 @@ button {
   --page-scrollbar-track: #f6f8fa;
   --page-scrollbar-thumb: #d0d7de;
   --page-scrollbar-thumb-hover: #afb8c1;
+  --brand-wordmark: #1f2328;
+  --brand-secondary: #59636e;
 }
 
 .theme-toggle {

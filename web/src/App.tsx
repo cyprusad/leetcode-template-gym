@@ -483,9 +483,16 @@ function App() {
       }
     >
       <header className="topbar">
-        <div>
-          <p className="eyebrow">LeetCode Gym Web</p>
-          <h1>Template reps in the browser</h1>
+        <div className="brand-lockup" aria-label="Interview Prep Party Coding Gym">
+          <img className="brand-mark" src="/brand/party-hat.png" alt="" />
+          <div className="brand-copy">
+            <div className="brand-wordmark">
+              interviewprep<span className="brand-dot">.</span>party
+            </div>
+            <div className="brand-subline">
+              <span className="brand-code">&lt;/&gt;</span> gym<span className="brand-dot">.</span>interviewprep<span className="brand-dot">.</span>party
+            </div>
+          </div>
         </div>
         <div className="topbar-controls">
           <label className="theme-toggle" aria-label="Toggle dark mode">
