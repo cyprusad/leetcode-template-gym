@@ -1,9 +1,96 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { SolutionCoachProps } from "./canonicalTypes";
 import { isPermanentReveal } from "./canonicalTypes";
 import { useRevealMachine } from "./useRevealMachine";
 import { SolutionComparison } from "./SolutionComparison";
 import styles from "./canonical.module.css";
+
+type PeekConfirmationProps = {
+  onConfirm: () => void;
+  onCancel: () => void;
+};
+
+function PeekConfirmation({ onConfirm, onCancel }: PeekConfirmationProps) {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const confirmButtonRef = useRef<HTMLButtonElement | null>(null);
+  const onCancelRef = useRef(onCancel);
+
+  useEffect(() => {
+    onCancelRef.current = onCancel;
+  }, [onCancel]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    confirmButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCancelRef.current();
+        return;
+      }
+      if (event.key !== "Tab" || !dialog) {
+        return;
+      }
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])"
+        )
+      );
+      if (focusable.length === 0) {
+        event.preventDefault();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown, true);
+      if (previousFocus && document.body.contains(previousFocus)) {
+        previousFocus.focus();
+      }
+    };
+  }, []);
+
+  return createPortal(
+    <div className={styles.backdrop} role="presentation">
+      <div
+        ref={dialogRef}
+        className={`${styles.dialog} ${styles.confirmationDialog}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="peek-confirmation-title"
+        aria-describedby="peek-confirmation-description"
+      >
+        <p className={styles.dialogEyebrow}>One-time Peek</p>
+        <h2 id="peek-confirmation-title">Peek at the sample template?</h2>
+        <p id="peek-confirmation-description" className={styles.confirmationCopy}>
+          This shows the sample template for 10 seconds. The rep timer pauses while it is open. Closing early still consumes it. Otherwise, PASS or one failed run plus 05:00 of active practice unlocks comparison permanently.
+        </p>
+        <div className={styles.confirmationActions}>
+          <button ref={confirmButtonRef} type="button" className="accent-button" onClick={onConfirm}>
+            Peek at code
+          </button>
+          <button type="button" className="secondary-button" onClick={onCancel}>
+            Keep practicing
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChange }: SolutionCoachProps) {
   const reveal = useRevealMachine(session, canonicalSource !== null);
@@ -59,36 +146,21 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
 
   return (
     <>
-      <section className={`stats-card ${styles.card}`} aria-label="Show me a sample template">
+      <section className={styles.card} aria-label="Show me a sample template">
         {reveal.state === "locked" ? (
-          showPeekConfirmation ? (
-            <div className={styles.confirmation} role="group" aria-label="Confirm Peek at code">
-              <p className={styles.confirmationTitle}>Peek at the sample template for 10 seconds?</p>
-              <p className={styles.confirmationCopy}>This uses your one-time Peek. The rep timer pauses while it is open. Closing early still consumes it. Otherwise, PASS or one failed run plus 05:00 of active practice unlocks this comparison permanently.</p>
-              <div className={styles.confirmationActions}>
-                <button type="button" className="accent-button" onClick={confirmPeek}>
-                  Use 10-second peek
-                </button>
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={() => setShowPeekConfirmation(false)}
-                >
-                  Keep practicing
-                </button>
-              </div>
-            </div>
-          ) : (
-            <button
-              ref={peekButtonRef}
-              type="button"
-              className="secondary-button"
-              disabled={!canPeek}
-              onClick={() => setShowPeekConfirmation(true)}
-            >
-              Peek at code
-            </button>
-          )
+          <button
+            ref={peekButtonRef}
+            type="button"
+            className="secondary-button"
+            disabled={!canPeek}
+            onClick={() => setShowPeekConfirmation(true)}
+          >
+            Peek at code
+          </button>
+        ) : reveal.state === "peek-consumed" ? (
+          <button ref={peekButtonRef} type="button" className="secondary-button" disabled>
+            Peek used
+          </button>
         ) : null}
 
         {permanent ? (
@@ -96,11 +168,14 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
             Show me a sample template
           </button>
         ) : null}
-
-        {reveal.state === "peek-consumed" ? (
-          <span className={styles.peekUsed}>Peek used</span>
-        ) : null}
       </section>
+
+      {showPeekConfirmation ? (
+        <PeekConfirmation
+          onConfirm={confirmPeek}
+          onCancel={() => setShowPeekConfirmation(false)}
+        />
+      ) : null}
 
       {isComparisonOpen ? (
         <SolutionComparison

@@ -10,13 +10,13 @@ test("opens and consumes the one-time canonical Peek", async ({ page }) => {
   const peek = page.getByRole("button", { name: "Peek at code" });
   await expect(peek).toBeEnabled({ timeout: 6_000 });
   await peek.click();
-  await expect(page.getByText("Peek at the sample template for 10 seconds?")).toBeVisible();
+  await expect(page.getByText("Peek at the sample template?")).toBeVisible();
 
-  await page.getByRole("button", { name: "Use 10-second peek" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Peek at code" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await expect(page.getByText("Peek ends in 10s")).toBeVisible();
 
   await page.waitForTimeout(10_200);
   await expect(page.getByRole("dialog")).not.toBeVisible();
-  await expect(page.getByText("Peek used")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Peek used" })).toBeDisabled();
 });

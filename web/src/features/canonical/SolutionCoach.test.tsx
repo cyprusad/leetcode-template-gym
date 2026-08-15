@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AttemptSessionView } from "./canonicalTypes";
 import { SolutionCoach } from "./SolutionCoach";
@@ -45,8 +45,8 @@ describe("SolutionCoach", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Peek at code" }));
-    expect(screen.getByText("Peek at the sample template for 10 seconds?")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Use 10-second peek" }));
+    expect(screen.getByText("Peek at the sample template?")).toBeInTheDocument();
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Peek at code" }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByText("Peek ends in 10s")).toBeInTheDocument();
 
@@ -55,7 +55,7 @@ describe("SolutionCoach", () => {
     });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByText("Peek used")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Peek used" })).toBeDisabled();
   });
 
   it("unlocks immediately after PASS and compares the passing snapshot", () => {
@@ -105,7 +105,7 @@ describe("SolutionCoach", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Peek at code" }));
-    fireEvent.click(screen.getByRole("button", { name: "Use 10-second peek" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Peek at code" }));
     expect(onPeekStateChange).toHaveBeenLastCalledWith(true);
 
     fireEvent.click(screen.getByRole("button", { name: "Close canonical comparison" }));

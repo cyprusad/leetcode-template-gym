@@ -2,62 +2,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 250px;
-  min-width: 220px;
+  flex: 0 0 auto;
   margin: 0;
-  padding: 6px 8px;
-  border: 1px solid var(--panel-border);
-  border-radius: var(--control-radius);
-  background: var(--panel-surface);
+  padding: 0;
 }
 
-.unlockedBadge {
-  padding: 3px 7px;
-  border-radius: 999px;
-  background: var(--success-bg);
-  color: var(--success-text);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.confirmationTitle,
 .confirmationCopy {
-  margin: 0;
-  color: var(--heading-text);
+  margin: 10px 0 18px;
+  color: var(--app-muted);
   font-size: 11px;
-  line-height: 1.4;
-}
-
-.confirmationCopy {
-  color: var(--app-muted);
-  font-size: 10px;
-}
-
-.progressTrack span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
-  transition: width 0.2s ease;
-}
-
-.confirmation {
-  display: grid;
-  width: 100%;
-  gap: 6px;
-}
-
-.peekUsed {
-  color: var(--app-muted);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
+  line-height: 1.5;
 }
 
 .confirmationActions {
   display: flex;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 6px;
 }
@@ -84,6 +43,20 @@
   border-radius: var(--panel-radius);
   background: var(--panel-bg);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.confirmationDialog {
+  grid-template-rows: auto;
+  width: min(540px, 100%);
+  max-height: calc(100vh - 48px);
+  padding: 24px;
+}
+
+.confirmationDialog h2 {
+  margin: 0;
+  color: var(--heading-text);
+  font-size: 1.1rem;
+  line-height: 1.25;
 }
 
 .dialogHeader {
@@ -160,15 +133,16 @@
 }
 
 @media (max-width: 760px) {
-  .card {
-    flex-basis: 100%;
-  }
   .backdrop {
     padding: 8px;
   }
 
   .dialog {
     max-height: calc(100vh - 16px);
+  }
+
+  .confirmationDialog {
+    padding: 18px;
   }
 
   .dialogHeader {
@@ -187,11 +161,5 @@
 
   .diffSurface {
     margin: 0 8px 8px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .progressTrack span {
-    transition: none;
   }
 }
