@@ -1,0 +1,204 @@
+.card {
+  position: relative;
+}
+
+.cardHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cardHeading h3 {
+  margin: 0;
+}
+
+.unlockedBadge {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--success-bg);
+  color: var(--success-text);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.statusCopy,
+.mutedCopy {
+  margin: 0 0 10px;
+  color: var(--app-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.progressGroup {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--app-muted);
+  font-size: 10px;
+}
+
+.progressTrack {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--button-border);
+}
+
+.progressTrack span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+  transition: width 0.2s ease;
+}
+
+.confirmation {
+  display: grid;
+  gap: 8px;
+}
+
+.confirmation p {
+  margin: 0;
+  color: var(--heading-text);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.confirmationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(8, 10, 18, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.dialog {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  width: min(1180px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: hidden;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  background: var(--panel-bg);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.dialogHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 12px;
+}
+
+.dialogEyebrow {
+  margin: 0 0 4px;
+  color: var(--eyebrow);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dialogHeader h2 {
+  margin: 0;
+  color: var(--heading-text);
+  font-size: 1.05rem;
+}
+
+.dialogDescription {
+  margin: 5px 0 0;
+  color: var(--app-muted);
+  font-size: 11px;
+}
+
+.closeButton {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid var(--button-border);
+  border-radius: var(--control-radius);
+  background: var(--panel-surface);
+  color: var(--app-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.diffLabels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  padding: 0 20px 8px;
+  color: var(--app-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.diffLabels span:last-child {
+  padding-left: 10px;
+}
+
+.diffSurface {
+  min-height: 0;
+  margin: 0 12px 12px;
+  overflow: hidden;
+  border: 1px solid var(--editor-border);
+  border-radius: var(--control-radius);
+}
+
+@media (max-width: 760px) {
+  .backdrop {
+    padding: 8px;
+  }
+
+  .dialog {
+    max-height: calc(100vh - 16px);
+  }
+
+  .dialogHeader {
+    padding: 14px 14px 10px;
+  }
+
+  .diffLabels {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 0 14px 8px;
+  }
+
+  .diffLabels span:last-child {
+    padding-left: 0;
+  }
+
+  .diffSurface {
+    margin: 0 8px 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressTrack span {
+    transition: none;
+  }
+}

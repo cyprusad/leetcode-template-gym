@@ -1,0 +1,6 @@
+[
+  {
+    "drillId": "normal:binary_search",
+    "source": "\"\"\"DRILL: Exact binary search. Target: <= 90 seconds.\"\"\"\ndef binary_search(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        middle = (left + right) // 2\n        if nums[middle] == target:\n            return middle\n        if nums[middle] < target:\n            left = middle + 1\n        else:\n            right = middle - 1\n    return -1\n\nassert binary_search([], 3) == -1\nassert binary_search([5], 5) == 0\nassert binary_search([1,3,5,7,9], 7) == 3\nassert binary_search([1,3,5,7,9], 4) == -1\nprint(\"PASS\")\n"
+  }
+]

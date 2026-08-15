@@ -1,7 +1,10 @@
 import Editor from "@monaco-editor/react";
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ComponentProps } from "react";
 import drills from "./generated/drills.json";
+import canonicalSolutions from "./generated/canonical-solutions.json";
 import { TerminalPane } from "./components/TerminalPane";
+import { SolutionCoach } from "./features/canonical/SolutionCoach";
+import type { AttemptPhase, AttemptSessionView } from "./features/canonical/canonicalTypes";
 import { runPythonSource } from "./pyodide";
 import {
   deriveMode,
@@ -84,6 +87,8 @@ function App() {
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [terminalOutput, setTerminalOutput] = useState("Pick a drill or choose a random one to start a timed rep.\n");
   const [isRunning, setIsRunning] = useState(false);
+  const [failedRunCount, setFailedRunCount] = useState(0);
+  const [passingSource, setPassingSource] = useState<string | null>(null);
   const [latestAttempt, setLatestAttempt] = useState<AttemptRecord | null>(null);
   const [recentAttempts, setRecentAttempts] = useState<AttemptRecord[]>(() => getLatestAttempts());
   const [draggingId, setDraggingId] = useState<string | null>(null);
@@ -99,6 +104,31 @@ function App() {
   const selectedDrill = selectedDrillId ? drillsById.get(selectedDrillId) ?? null : null;
   const selectedMode = selectedDrill ? deriveMode(selectedDrill, assignments) : activeMode;
   const selectedBest = selectedDrill ? getBestAttempt(selectedDrill.id) : null;
+  const canonicalByDrillId = useMemo(
+    () => new Map(canonicalSolutions.map((solution) => [solution.drillId, solution.source])),
+    []
+  );
+  const selectedCanonicalSource = selectedDrill ? canonicalByDrillId.get(selectedDrill.id) ?? null : null;
+  const attemptPhase: AttemptPhase = countdown !== null
+    ? "armed"
+    : attempt?.finishedAtMs
+      ? "passed"
+      : isRunning
+        ? "running"
+        : attempt
+          ? "active"
+          : "idle";
+  const canonicalSession: AttemptSessionView = {
+    attemptId: selectedDrill && attempt ? selectedDrill.id + ":" + attempt.startedAtMs : null,
+    drillId: selectedDrill?.id ?? null,
+    phase: attemptPhase,
+    startedAtMs: attempt?.startedAtMs ?? null,
+    elapsedSeconds: timerSeconds,
+    failedRunCount,
+    currentSource: editorValue,
+    passingSource,
+    pointsEnabled: false
+  };
 
   useEffect(() => {
     if (!selectedDrill) {
@@ -165,6 +195,8 @@ function App() {
     setLatestAttempt(null);
     setAttempt(null);
     setTimerSeconds(0);
+    setFailedRunCount(0);
+    setPassingSource(null);
     setCountdown(3);
     setTerminalOutput(`Queued ${drill.title}. Countdown will start the rep.\n`);
   }
@@ -234,6 +266,7 @@ function App() {
       };
       const passed = result.ok && /(^|\n)PASS(\n|$)/.test(result.output);
       if (!passed) {
+        setFailedRunCount((currentCount) => currentCount + 1);
         setAttempt((currentAttempt) =>
           currentAttempt ? { ...currentAttempt, metrics: completedMetrics } : currentAttempt
         );
@@ -258,6 +291,7 @@ function App() {
         finishedAtMs
       });
       setTimerSeconds(elapsedSeconds);
+      setPassingSource(editorValue);
       setLatestAttempt(record);
       saveAttempt(record);
       setRecentAttempts(getLatestAttempts());
@@ -628,6 +662,11 @@ function App() {
           <div className="terminal-surface">
             <TerminalPane output={terminalOutput} theme={themeConfig.terminalTheme} />
           </div>
+          <SolutionCoach
+            session={canonicalSession}
+            canonicalSource={selectedCanonicalSource}
+            theme={theme}
+          />
           <div className="stats-card">
             <h3>Attempt stats</h3>
             <dl>
