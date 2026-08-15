@@ -1,5 +1,6 @@
 import { DiffEditor } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import styles from "./canonical.module.css";
 
 type SolutionComparisonProps = {
@@ -47,6 +48,10 @@ export function SolutionComparison({
         return;
       }
       if (event.key !== "Tab" || !dialog) {
+        if ((event.ctrlKey || event.metaKey) && ["c", "x", "v"].includes(event.key.toLowerCase())) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
         return;
       }
       const focusable = Array.from(
@@ -69,16 +74,27 @@ export function SolutionComparison({
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown);
+    function blockClipboard(event: ClipboardEvent) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    document.addEventListener("keydown", handleKeyDown, true);
+    document.addEventListener("copy", blockClipboard, true);
+    document.addEventListener("cut", blockClipboard, true);
+    document.addEventListener("paste", blockClipboard, true);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown, true);
+      document.removeEventListener("copy", blockClipboard, true);
+      document.removeEventListener("cut", blockClipboard, true);
+      document.removeEventListener("paste", blockClipboard, true);
       if (previousFocus && document.body.contains(previousFocus)) {
         previousFocus.focus();
       }
     };
   }, []);
 
-  return (
+  return createPortal(
     <div className={styles.backdrop} role="presentation">
       <div
         ref={dialogRef}
@@ -112,7 +128,11 @@ export function SolutionComparison({
           <span>Your attempt</span>
           <span>Canonical pattern</span>
         </div>
-        <div className={styles.diffSurface}>
+        <p className={styles.clipboardNotice}>Reference code is view-only and cannot be copied during the review.</p>
+        <div
+          className={styles.diffSurface}
+          onContextMenu={(event) => event.preventDefault()}
+        >
           <DiffEditor
             original={originalSource}
             modified={canonicalSource}
@@ -121,6 +141,8 @@ export function SolutionComparison({
             height="min(68vh, 720px)"
             options={{
               readOnly: true,
+              domReadOnly: true,
+              contextmenu: false,
               originalEditable: false,
               minimap: { enabled: false },
               automaticLayout: true,
@@ -132,6 +154,7 @@ export function SolutionComparison({
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

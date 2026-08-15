@@ -659,14 +659,14 @@ function App() {
               </button>
             </div>
           </div>
-          <div className="terminal-surface">
-            <TerminalPane output={terminalOutput} theme={themeConfig.terminalTheme} />
-          </div>
           <SolutionCoach
             session={canonicalSession}
             canonicalSource={selectedCanonicalSource}
             theme={theme}
           />
+          <div className="terminal-surface">
+            <TerminalPane output={terminalOutput} theme={themeConfig.terminalTheme} />
+          </div>
           <div className="stats-card">
             <h3>Attempt stats</h3>
             <dl>

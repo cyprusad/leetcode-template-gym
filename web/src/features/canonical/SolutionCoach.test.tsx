@@ -73,6 +73,26 @@ describe("SolutionCoach", () => {
     expect(screen.getByTestId("diff-editor")).toBeInTheDocument();
   });
 
+  it("blocks clipboard actions while comparison is open", () => {
+    render(
+      <SolutionCoach
+        session={session({ phase: "passed", passingSource: "passing source" })}
+        canonicalSource="canonical source"
+        theme="dark"
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Compare solution" }));
+    const copyEvent = new Event("copy", { cancelable: true });
+    document.dispatchEvent(copyEvent);
+    expect(copyEvent.defaultPrevented).toBe(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "Close canonical comparison" }));
+    const afterCloseEvent = new Event("copy", { cancelable: true });
+    document.dispatchEvent(afterCloseEvent);
+    expect(afterCloseEvent.defaultPrevented).toBe(false);
+  });
+
   it("unlocks after a failed run and five minutes", () => {
     const { rerender } = render(
       <SolutionCoach session={session({ failedRunCount: 1, elapsedSeconds: 299 })} canonicalSource="canonical source" theme="dark" />

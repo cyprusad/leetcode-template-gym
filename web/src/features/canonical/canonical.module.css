@@ -1,5 +1,9 @@
 .card {
   position: relative;
+  margin: 0;
+  padding: 8px 10px;
+  border-top: 0;
+  border-bottom: 1px solid var(--panel-border);
 }
 
 .cardHeading {
@@ -82,13 +86,14 @@
 
 .backdrop {
   position: fixed;
-  z-index: 20;
+  z-index: 1000;
   inset: 0;
   display: grid;
   place-items: center;
   padding: 24px;
   background: rgba(8, 10, 18, 0.72);
   backdrop-filter: blur(8px);
+  overscroll-behavior: contain;
 }
 
 .dialog {
@@ -130,6 +135,13 @@
   margin: 5px 0 0;
   color: var(--app-muted);
   font-size: 11px;
+}
+
+.clipboardNotice {
+  margin: 0 20px 8px;
+  color: var(--app-muted);
+  font-size: 10px;
+  text-align: right;
 }
 
 .closeButton {
