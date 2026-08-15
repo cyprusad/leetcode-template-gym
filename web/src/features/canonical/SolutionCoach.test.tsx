@@ -44,8 +44,8 @@ describe("SolutionCoach", () => {
       <SolutionCoach session={session()} canonicalSource="canonical source" theme="dark" />
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Peek for 10 seconds" }));
-    expect(screen.getByText("Use your one-time 10-second canonical peek?")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Peek at code" }));
+    expect(screen.getByText("Peek at the sample template for 10 seconds?")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Use 10-second peek" }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByText("Peek ends in 10s")).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe("SolutionCoach", () => {
     });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Peek used" })).toBeDisabled();
+    expect(screen.getByText("Peek used")).toBeInTheDocument();
   });
 
   it("unlocks immediately after PASS and compares the passing snapshot", () => {
@@ -67,8 +67,8 @@ describe("SolutionCoach", () => {
       />
     );
 
-    expect(screen.getByText("Passed. Compare your rep with the reference pattern.")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Compare solution" }));
+    expect(screen.getByRole("button", { name: "Show me a sample template" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Show me a sample template" }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByTestId("diff-editor")).toBeInTheDocument();
   });
@@ -82,7 +82,7 @@ describe("SolutionCoach", () => {
       />
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Compare solution" }));
+    fireEvent.click(screen.getByRole("button", { name: "Show me a sample template" }));
     const copyEvent = new Event("copy", { cancelable: true });
     document.dispatchEvent(copyEvent);
     expect(copyEvent.defaultPrevented).toBe(true);
@@ -104,7 +104,7 @@ describe("SolutionCoach", () => {
       />
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Peek for 10 seconds" }));
+    fireEvent.click(screen.getByRole("button", { name: "Peek at code" }));
     fireEvent.click(screen.getByRole("button", { name: "Use 10-second peek" }));
     expect(onPeekStateChange).toHaveBeenLastCalledWith(true);
 
@@ -116,11 +116,10 @@ describe("SolutionCoach", () => {
     const { rerender } = render(
       <SolutionCoach session={session({ failedRunCount: 1, elapsedSeconds: 299 })} canonicalSource="canonical source" theme="dark" />
     );
-    expect(screen.getByRole("button", { name: "Peek for 10 seconds" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Peek at code" })).toBeEnabled();
     rerender(
       <SolutionCoach session={session({ failedRunCount: 1, elapsedSeconds: 300 })} canonicalSource="canonical source" theme="dark" />
     );
-    expect(screen.getByText("Practice window reached. Review the reference pattern.")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Compare solution" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Show me a sample template" })).toBeInTheDocument();
   });
 });

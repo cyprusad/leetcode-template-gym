@@ -5,12 +5,6 @@ import { useRevealMachine } from "./useRevealMachine";
 import { SolutionComparison } from "./SolutionComparison";
 import styles from "./canonical.module.css";
 
-function formatProgress(seconds: number): string {
-  const minutes = Math.floor(seconds / 60).toString().padStart(2, "0");
-  const remainder = Math.floor(seconds % 60).toString().padStart(2, "0");
-  return `${minutes}:${remainder}`;
-}
-
 export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChange }: SolutionCoachProps) {
   const reveal = useRevealMachine(session, canonicalSource !== null);
   const [showPeekConfirmation, setShowPeekConfirmation] = useState(false);
@@ -42,7 +36,6 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
   const hasAttempt = session.attemptId !== null;
   const canPeek = hasAttempt && session.phase !== "idle" && session.phase !== "armed";
   const permanent = isPermanentReveal(reveal.state);
-  const progress = Math.min(100, Math.round((session.elapsedSeconds / 300) * 100));
 
   function openPermanentComparison() {
     setOriginalSource(session.passingSource ?? session.currentSource);
@@ -66,40 +59,12 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
 
   return (
     <>
-      <section className={`stats-card ${styles.card}`}>
-        <div className={styles.cardHeading}>
-          <h3>Canonical pattern</h3>
-          {permanent ? <span className={styles.unlockedBadge}>Unlocked</span> : null}
-        </div>
-        {reveal.state === "unlocked-pass" ? (
-          <p className={styles.statusCopy} aria-live="polite">Passed. Compare your rep with the reference pattern.</p>
-        ) : reveal.state === "unlocked-struggle" ? (
-          <p className={styles.statusCopy} aria-live="polite">Practice window reached. Review the reference pattern.</p>
-        ) : reveal.state === "peek-consumed" ? (
-          <p className={styles.statusCopy} aria-live="polite">Your one-time peek has been used. Keep working from memory.</p>
-        ) : (
-          <>
-            <p className={styles.statusCopy}>Pass, or make one run and practice for 05:00.</p>
-            {session.failedRunCount > 0 ? (
-              <div className={styles.progressGroup}>
-                <div className={styles.progressLabel}>
-                  <span>Practice progress</span>
-                  <span>{formatProgress(Math.min(300, session.elapsedSeconds))} / 05:00</span>
-                </div>
-                <div className={styles.progressTrack} aria-label={`${progress}% practice progress`}>
-                  <span style={{ width: `${progress}%` }} />
-                </div>
-              </div>
-            ) : (
-              <p className={styles.mutedCopy}>Make a run to start the fallback unlock timer.</p>
-            )}
-          </>
-        )}
-
+      <section className={`stats-card ${styles.card}`} aria-label="Show me a sample template">
         {reveal.state === "locked" ? (
           showPeekConfirmation ? (
-            <div className={styles.confirmation}>
-              <p>Use your one-time 10-second canonical peek?</p>
+            <div className={styles.confirmation} role="group" aria-label="Confirm Peek at code">
+              <p className={styles.confirmationTitle}>Peek at the sample template for 10 seconds?</p>
+              <p className={styles.confirmationCopy}>This uses your one-time Peek. The rep timer pauses while it is open. Closing early still consumes it. Otherwise, PASS or one failed run plus 05:00 of active practice unlocks this comparison permanently.</p>
               <div className={styles.confirmationActions}>
                 <button type="button" className="accent-button" onClick={confirmPeek}>
                   Use 10-second peek
@@ -121,26 +86,19 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
               disabled={!canPeek}
               onClick={() => setShowPeekConfirmation(true)}
             >
-              Peek for 10 seconds
+              Peek at code
             </button>
           )
         ) : null}
 
         {permanent ? (
           <button type="button" className="accent-button" onClick={openPermanentComparison}>
-            Compare solution
+            Show me a sample template
           </button>
         ) : null}
 
         {reveal.state === "peek-consumed" ? (
-          <button
-            ref={peekButtonRef}
-            type="button"
-            className="secondary-button"
-            disabled
-          >
-            Peek used
-          </button>
+          <span className={styles.peekUsed}>Peek used</span>
         ) : null}
       </section>
 

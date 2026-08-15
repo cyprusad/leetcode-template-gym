@@ -7,10 +7,10 @@ test("opens and consumes the one-time canonical Peek", async ({ page }) => {
   await expect(drill).toBeVisible();
   await drill.click();
 
-  const peek = page.getByRole("button", { name: "Peek for 10 seconds" });
+  const peek = page.getByRole("button", { name: "Peek at code" });
   await expect(peek).toBeEnabled({ timeout: 6_000 });
   await peek.click();
-  await expect(page.getByText("Use your one-time 10-second canonical peek?")).toBeVisible();
+  await expect(page.getByText("Peek at the sample template for 10 seconds?")).toBeVisible();
 
   await page.getByRole("button", { name: "Use 10-second peek" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
@@ -18,5 +18,5 @@ test("opens and consumes the one-time canonical Peek", async ({ page }) => {
 
   await page.waitForTimeout(10_200);
   await expect(page.getByRole("dialog")).not.toBeVisible();
-  await expect(page.getByRole("button", { name: "Peek used" })).toBeDisabled();
+  await expect(page.getByText("Peek used")).toBeVisible();
 });

@@ -1,29 +1,14 @@
 .card {
   display: flex;
-  position: relative;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: center;
   flex: 1 1 250px;
   min-width: 220px;
-  gap: 8px;
   margin: 0;
-  padding: 8px 10px;
-  border-top: 0;
+  padding: 6px 8px;
   border: 1px solid var(--panel-border);
   border-radius: var(--control-radius);
   background: var(--panel-surface);
-}
-
-.cardHeading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 0;
-}
-
-.cardHeading h3 {
-  margin: 0;
 }
 
 .unlockedBadge {
@@ -37,35 +22,17 @@
   text-transform: uppercase;
 }
 
-.statusCopy,
-.mutedCopy {
-  flex: 1 1 120px;
+.confirmationTitle,
+.confirmationCopy {
   margin: 0;
-  color: var(--app-muted);
+  color: var(--heading-text);
   font-size: 11px;
   line-height: 1.4;
 }
 
-.progressGroup {
-  display: grid;
-  flex: 1 1 120px;
-  gap: 5px;
-  margin: 0;
-}
-
-.progressLabel {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+.confirmationCopy {
   color: var(--app-muted);
   font-size: 10px;
-}
-
-.progressTrack {
-  height: 5px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--button-border);
 }
 
 .progressTrack span {
@@ -78,15 +45,15 @@
 
 .confirmation {
   display: grid;
-  flex: 1 1 220px;
-  gap: 8px;
+  width: 100%;
+  gap: 6px;
 }
 
-.confirmation p {
-  margin: 0;
-  color: var(--heading-text);
-  font-size: 11px;
-  line-height: 1.4;
+.peekUsed {
+  color: var(--app-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .confirmationActions {
