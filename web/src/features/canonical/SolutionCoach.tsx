@@ -11,12 +11,13 @@ function formatProgress(seconds: number): string {
   return `${minutes}:${remainder}`;
 }
 
-export function SolutionCoach({ session, canonicalSource, theme }: SolutionCoachProps) {
+export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChange }: SolutionCoachProps) {
   const reveal = useRevealMachine(session, canonicalSource !== null);
   const [showPeekConfirmation, setShowPeekConfirmation] = useState(false);
   const [isComparisonOpen, setIsComparisonOpen] = useState(false);
   const [originalSource, setOriginalSource] = useState("");
   const peekButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previousPeekActiveRef = useRef(false);
 
   useEffect(() => {
     if (reveal.state === "peek-consumed") {
@@ -24,6 +25,15 @@ export function SolutionCoach({ session, canonicalSource, theme }: SolutionCoach
       setShowPeekConfirmation(false);
     }
   }, [reveal.state]);
+
+  useEffect(() => {
+    const isPeekActive = reveal.state === "peek-active";
+    if (isPeekActive === previousPeekActiveRef.current) {
+      return;
+    }
+    previousPeekActiveRef.current = isPeekActive;
+    onPeekStateChange?.(isPeekActive);
+  }, [onPeekStateChange, reveal.state]);
 
   if (canonicalSource === null || reveal.state === "unavailable") {
     return null;

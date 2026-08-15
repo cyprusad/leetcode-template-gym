@@ -1,9 +1,17 @@
 .card {
+  display: flex;
   position: relative;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1 1 250px;
+  min-width: 220px;
+  gap: 8px;
   margin: 0;
   padding: 8px 10px;
   border-top: 0;
-  border-bottom: 1px solid var(--panel-border);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--control-radius);
+  background: var(--panel-surface);
 }
 
 .cardHeading {
@@ -11,7 +19,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .cardHeading h3 {
@@ -31,7 +39,8 @@
 
 .statusCopy,
 .mutedCopy {
-  margin: 0 0 10px;
+  flex: 1 1 120px;
+  margin: 0;
   color: var(--app-muted);
   font-size: 11px;
   line-height: 1.4;
@@ -39,8 +48,9 @@
 
 .progressGroup {
   display: grid;
+  flex: 1 1 120px;
   gap: 5px;
-  margin-bottom: 10px;
+  margin: 0;
 }
 
 .progressLabel {
@@ -68,6 +78,7 @@
 
 .confirmation {
   display: grid;
+  flex: 1 1 220px;
   gap: 8px;
 }
 
@@ -182,6 +193,9 @@
 }
 
 @media (max-width: 760px) {
+  .card {
+    flex-basis: 100%;
+  }
   .backdrop {
     padding: 8px;
   }

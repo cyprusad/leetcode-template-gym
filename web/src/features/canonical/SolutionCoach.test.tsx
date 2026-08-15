@@ -93,6 +93,25 @@ describe("SolutionCoach", () => {
     expect(afterCloseEvent.defaultPrevented).toBe(false);
   });
 
+  it("notifies the app when Peek pauses and resumes the timer", () => {
+    const onPeekStateChange = vi.fn();
+    render(
+      <SolutionCoach
+        session={session()}
+        canonicalSource="canonical source"
+        theme="dark"
+        onPeekStateChange={onPeekStateChange}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Peek for 10 seconds" }));
+    fireEvent.click(screen.getByRole("button", { name: "Use 10-second peek" }));
+    expect(onPeekStateChange).toHaveBeenLastCalledWith(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "Close canonical comparison" }));
+    expect(onPeekStateChange).toHaveBeenLastCalledWith(false);
+  });
+
   it("unlocks after a failed run and five minutes", () => {
     const { rerender } = render(
       <SolutionCoach session={session({ failedRunCount: 1, elapsedSeconds: 299 })} canonicalSource="canonical source" theme="dark" />

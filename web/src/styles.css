@@ -140,6 +140,19 @@ button {
   padding: 4px 0 8px;
 }
 
+.editor-panel-head {
+  flex-wrap: wrap;
+}
+
+.editor-panel-head > div:first-child {
+  min-width: 180px;
+  flex: 1 1 180px;
+}
+
+.editor-panel-head > .stats-card {
+  flex: 1 1 250px;
+}
+
 .panel-head h2,
 .bucket-header h2,
 .stats-card h3 {
@@ -373,6 +386,8 @@ button {
 .timer-cluster {
   display: flex;
   align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
 }
 
 .timer-badge,
@@ -389,6 +404,19 @@ button {
 .timer-badge {
   background: var(--timer-bg);
   color: var(--timer-text);
+}
+
+.timer-badge.paused {
+  background: var(--countdown-bg);
+  color: var(--countdown-text);
+}
+
+.timer-paused-label {
+  color: var(--countdown-text);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .timer-badge.complete {

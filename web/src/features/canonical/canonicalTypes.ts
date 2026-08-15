@@ -32,6 +32,7 @@ export type SolutionCoachProps = {
   session: AttemptSessionView;
   canonicalSource: string | null;
   theme: ThemeName;
+  onPeekStateChange?: (isActive: boolean) => void;
 };
 
 export function isPermanentReveal(state: RevealState): boolean {

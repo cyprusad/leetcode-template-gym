@@ -85,6 +85,7 @@ function App() {
   const [countdown, setCountdown] = useState<number | null>(null);
   const [attempt, setAttempt] = useState<AttemptSnapshot | null>(null);
   const [timerSeconds, setTimerSeconds] = useState(0);
+  const [timerPausedAtMs, setTimerPausedAtMs] = useState<number | null>(null);
   const [terminalOutput, setTerminalOutput] = useState("Pick a drill or choose a random one to start a timed rep.\n");
   const [isRunning, setIsRunning] = useState(false);
   const [failedRunCount, setFailedRunCount] = useState(0);
@@ -94,6 +95,7 @@ function App() {
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const editorRef = useRef<Parameters<EditorMount>[0] | null>(null);
   const monacoRef = useRef<Parameters<EditorMount>[1] | null>(null);
+  const pausedDurationMsRef = useRef(0);
   const themeConfig = themes[theme];
 
   const drillsById = useMemo(
@@ -161,14 +163,17 @@ function App() {
   }, [countdown, selectedDrill]);
 
   useEffect(() => {
-    if (!attempt || attempt.finishedAtMs) {
+    if (!attempt || attempt.finishedAtMs || timerPausedAtMs !== null) {
       return;
     }
-    const interval = window.setInterval(() => {
-      setTimerSeconds(Math.floor((Date.now() - attempt.startedAtMs) / 1000));
-    }, 250);
+    const updateTimer = () => {
+      const elapsedMs = Date.now() - attempt.startedAtMs - pausedDurationMsRef.current;
+      setTimerSeconds(Math.max(0, Math.floor(elapsedMs / 1000)));
+    };
+    updateTimer();
+    const interval = window.setInterval(updateTimer, 250);
     return () => window.clearInterval(interval);
-  }, [attempt]);
+  }, [attempt, timerPausedAtMs]);
 
   useEffect(() => {
     saveTheme(theme);
@@ -185,6 +190,19 @@ function App() {
     monacoRef.current.editor.setTheme(themeConfig.editorTheme);
   }, [themeConfig.editorTheme]);
 
+  function handlePeekStateChange(isActive: boolean) {
+    if (isActive) {
+      setTimerPausedAtMs((current) => current ?? Date.now());
+      return;
+    }
+    setTimerPausedAtMs((current) => {
+      if (current !== null) {
+        pausedDurationMsRef.current += Date.now() - current;
+      }
+      return null;
+    });
+  }
+
   function startSelection(drillId: string) {
     const drill = drillsById.get(drillId);
     if (!drill) {
@@ -195,6 +213,8 @@ function App() {
     setLatestAttempt(null);
     setAttempt(null);
     setTimerSeconds(0);
+    pausedDurationMsRef.current = 0;
+    setTimerPausedAtMs(null);
     setFailedRunCount(0);
     setPassingSource(null);
     setCountdown(3);
@@ -274,7 +294,7 @@ function App() {
       }
 
       const finishedAtMs = Date.now();
-      const elapsedSeconds = Math.max(1, Math.round((finishedAtMs - attempt.startedAtMs) / 1000));
+      const elapsedSeconds = Math.max(1, Math.round((finishedAtMs - attempt.startedAtMs - pausedDurationMsRef.current) / 1000));
       const record: AttemptRecord = {
         id: `${selectedDrill.id}:${finishedAtMs}`,
         drillId: selectedDrill.id,
@@ -593,7 +613,7 @@ function App() {
         />
 
         <section className="panel editor-panel">
-          <div className="panel-head">
+          <div className="panel-head editor-panel-head">
             <div>
               <h2>{selectedDrill?.title ?? "Select a drill"}</h2>
               <p>
@@ -602,13 +622,22 @@ function App() {
                   : "The editor will load the chosen template source."}
               </p>
             </div>
+            <SolutionCoach
+              session={canonicalSession}
+              canonicalSource={selectedCanonicalSource}
+              theme={theme}
+              onPeekStateChange={handlePeekStateChange}
+            />
             <div className="timer-cluster">
               {countdown !== null ? (
                 <div className="countdown-badge">Starts in {countdown}</div>
               ) : (
-                <div className={`timer-badge${attempt?.finishedAtMs ? " complete" : ""}`}>
+                <>
+                <div className={`timer-badge${attempt?.finishedAtMs ? " complete" : ""}${timerPausedAtMs !== null ? " paused" : ""}`}>
                   {formatDuration(timerSeconds)}
                 </div>
+                {timerPausedAtMs !== null ? <span className="timer-paused-label">Peek paused</span> : null}
+                </>
               )}
             </div>
           </div>
@@ -659,11 +688,6 @@ function App() {
               </button>
             </div>
           </div>
-          <SolutionCoach
-            session={canonicalSession}
-            canonicalSource={selectedCanonicalSource}
-            theme={theme}
-          />
           <div className="terminal-surface">
             <TerminalPane output={terminalOutput} theme={themeConfig.terminalTheme} />
           </div>

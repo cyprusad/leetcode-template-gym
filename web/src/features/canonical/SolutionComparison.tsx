@@ -111,6 +111,7 @@ export function SolutionComparison({
             </p>
             <h2 id="canonical-comparison-title">Compare the pattern</h2>
             <p id="canonical-comparison-description" className={styles.dialogDescription}>
+              {mode === "peek" ? "Your timer is paused while Peek is open. " : ""}
               Your attempt is on the left. The canonical pattern is on the right.
             </p>
           </div>
