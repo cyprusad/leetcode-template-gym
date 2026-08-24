@@ -95,10 +95,10 @@ export function SolutionComparison({
   }, []);
 
   return createPortal(
-    <div className={styles.backdrop} role="presentation">
+    <div className={`${styles.backdrop} theme-${theme}`} role="presentation">
       <div
         ref={dialogRef}
-        className={styles.dialog}
+        className={`${styles.dialog} theme-${theme}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="canonical-comparison-title"

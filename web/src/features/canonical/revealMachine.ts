@@ -26,9 +26,22 @@ export function syncRevealSnapshot(
   }
 
   const attemptChanged = snapshot.attemptKey !== session.attemptId;
-  const base = attemptChanged
-    ? createRevealSnapshot(true, session.attemptId)
-    : snapshot;
+  let base: RevealSnapshot;
+  if (attemptChanged) {
+    // Preserve a consumed/active peek that was started before the attempt officially
+    // existed (attemptId was null during countdown). This keeps the user's
+    // one-time peek consumed for that drill even after the timer starts.
+    if (
+      snapshot.attemptKey === null &&
+      (snapshot.state === "peek-active" || snapshot.state === "peek-consumed")
+    ) {
+      base = { ...snapshot, attemptKey: session.attemptId };
+    } else {
+      base = createRevealSnapshot(true, session.attemptId);
+    }
+  } else {
+    base = snapshot;
+  }
 
   if (session.phase === "passed") {
     return {
@@ -73,13 +86,7 @@ export function beginPeek(
   session: AttemptSessionView,
   nowMs: number
 ): RevealSnapshot {
-  if (
-    snapshot.state !== "locked" ||
-    snapshot.attemptKey !== session.attemptId ||
-    session.attemptId === null ||
-    session.phase === "idle" ||
-    session.phase === "armed"
-  ) {
+  if (snapshot.state !== "locked" || snapshot.attemptKey !== session.attemptId) {
     return snapshot;
   }
   return {

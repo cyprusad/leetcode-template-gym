@@ -29,10 +29,10 @@ describe("canonical reveal machine", () => {
     expect(createRevealSnapshot(false, "attempt-1").state).toBe("unavailable");
   });
 
-  it("requires an active attempt before Peek can start", () => {
+  it("allows Peek even before the timer has officially started", () => {
     const snapshot = createRevealSnapshot(true, null);
     const next = beginPeek(snapshot, session({ attemptId: null, phase: "armed" }), 0);
-    expect(next.state).toBe("locked");
+    expect(next.state).toBe("peek-active");
   });
 
   it("consumes Peek after exactly ten seconds", () => {

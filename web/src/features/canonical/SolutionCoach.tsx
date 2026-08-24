@@ -7,11 +7,12 @@ import { SolutionComparison } from "./SolutionComparison";
 import styles from "./canonical.module.css";
 
 type PeekConfirmationProps = {
+  theme: "light" | "dark";
   onConfirm: () => void;
   onCancel: () => void;
 };
 
-function PeekConfirmation({ onConfirm, onCancel }: PeekConfirmationProps) {
+function PeekConfirmation({ theme, onConfirm, onCancel }: PeekConfirmationProps) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const confirmButtonRef = useRef<HTMLButtonElement | null>(null);
   const onCancelRef = useRef(onCancel);
@@ -64,10 +65,10 @@ function PeekConfirmation({ onConfirm, onCancel }: PeekConfirmationProps) {
   }, []);
 
   return createPortal(
-    <div className={styles.backdrop} role="presentation">
+    <div className={`${styles.backdrop} theme-${theme}`} role="presentation">
       <div
         ref={dialogRef}
-        className={`${styles.dialog} ${styles.confirmationDialog}`}
+        className={`${styles.dialog} ${styles.confirmationDialog} theme-${theme}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="peek-confirmation-title"
@@ -120,8 +121,6 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
     return null;
   }
 
-  const hasAttempt = session.attemptId !== null;
-  const canPeek = hasAttempt && session.phase !== "idle" && session.phase !== "armed";
   const permanent = isPermanentReveal(reveal.state);
 
   function openPermanentComparison() {
@@ -152,7 +151,6 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
             ref={peekButtonRef}
             type="button"
             className="secondary-button"
-            disabled={!canPeek}
             onClick={() => setShowPeekConfirmation(true)}
           >
             Peek at code
@@ -172,6 +170,7 @@ export function SolutionCoach({ session, canonicalSource, theme, onPeekStateChan
 
       {showPeekConfirmation ? (
         <PeekConfirmation
+          theme={theme}
           onConfirm={confirmPeek}
           onCancel={() => setShowPeekConfirmation(false)}
         />
