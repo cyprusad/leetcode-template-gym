@@ -12,6 +12,12 @@ type SolutionComparisonProps = {
   onClose: () => void;
 };
 
+export function getPeekTone(remainingSeconds: number): "peekTimerSafe" | "peekTimerWarning" | "peekTimerDanger" {
+  if (remainingSeconds > 6) return "peekTimerSafe";
+  if (remainingSeconds > 3) return "peekTimerWarning";
+  return "peekTimerDanger";
+}
+
 export function SolutionComparison({
   originalSource,
   canonicalSource,
@@ -106,7 +112,15 @@ export function SolutionComparison({
       >
         <div className={styles.dialogHeader}>
           <div>
-            <p className={styles.dialogEyebrow}>
+            <p
+              className={
+                mode === "peek"
+                  ? `${styles.peekTimer} ${styles[getPeekTone(remainingSeconds)]}`
+                  : styles.dialogEyebrow
+              }
+              data-testid={mode === "peek" ? "peek-timer" : undefined}
+              aria-live={mode === "peek" ? "polite" : undefined}
+            >
               {mode === "peek" ? `Peek ends in ${remainingSeconds}s` : "Reference unlocked"}
             </p>
             <h2 id="canonical-comparison-title">Compare the pattern</h2>

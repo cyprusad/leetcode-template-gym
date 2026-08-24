@@ -1,6 +1,114 @@
 [
   {
+    "drillId": "advanced:dp_1d",
+    "source": "\"\"\"DRILL: 1-D DP. Target: <= 2 minutes.\"\"\"\ndef house_robber(nums):\n    prev2 = prev1 = 0\n    for x in nums:\n        cur = max(prev1, prev2 + x)\n        prev2, prev1 = prev1, cur\n    return prev1\n\nassert house_robber([1,2,3,1]) == 4\nassert house_robber([2,7,9,3,1]) == 12\nassert house_robber([]) == 0\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "advanced:dp_grid",
+    "source": "\"\"\"DRILL: 2-D/grid DP. Target: <= 2 minutes.\"\"\"\ndef unique_paths(m, n):\n    # 1-D DP: dp[j] = paths to (i,j)\n    dp = [1] * n\n    for i in range(1, m):\n        for j in range(1, n):\n            dp[j] += dp[j-1]\n    return dp[-1] if n else 0\n\nassert unique_paths(3, 7) == 28\nassert unique_paths(1, 5) == 1\nassert unique_paths(2, 2) == 2\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "advanced:union_find",
+    "source": "\"\"\"DRILL: Union-Find / DSU. Target: <= 3 minutes.\"\"\"\nclass DSU:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n\n    def find(self, x):\n        if self.parent[x] != x:\n            self.parent[x] = self.find(self.parent[x])\n        return self.parent[x]\n\n    def union(self, a, b):\n        ra, rb = self.find(a), self.find(b)\n        if ra == rb:\n            return False\n        if self.rank[ra] < self.rank[rb]:\n            ra, rb = rb, ra\n        self.parent[rb] = ra\n        if self.rank[ra] == self.rank[rb]:\n            self.rank[ra] += 1\n        return True\n\nd = DSU(5)\nassert d.union(0,1) is True\nassert d.union(1,2) is True\nassert d.find(0) == d.find(2)\nassert d.union(0,2) is False\nassert d.find(3) != d.find(0)\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:backtracking_combinations",
+    "source": "\"\"\"DRILL: Combination backtracking with start index. Target: <= 3 minutes.\"\"\"\ndef combinations(nums, k):\n    res = []\n    path = []\n\n    def backtrack(start):\n        if len(path) == k:\n            res.append(path.copy())\n            return\n        for i in range(start, len(nums)):\n            path.append(nums[i])\n            backtrack(i + 1)\n            path.pop()\n\n    backtrack(0)\n    return res\n\nout = combinations([1,2,3,4], 2)\nassert len(out) == 6\nassert [1,2] in out and [3,4] in out\nassert combinations([1,2], 0) == [[]]\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:backtracking_permutations",
+    "source": "\"\"\"DRILL: Permutations backtracking. Target: <= 3 minutes.\"\"\"\ndef permutations(nums):\n    res = []\n    path = []\n    used = [False] * len(nums)\n\n    def backtrack():\n        if len(path) == len(nums):\n            res.append(path.copy())\n            return\n        for i in range(len(nums)):\n            if used[i]:\n                continue\n            used[i] = True\n            path.append(nums[i])\n            backtrack()\n            path.pop()\n            used[i] = False\n\n    backtrack()\n    return res\n\nout = permutations([1,2,3])\nassert len(out) == 6\nassert [1,2,3] in out and [3,2,1] in out\nassert permutations([]) == [[]]\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:backtracking_subsets",
+    "source": "\"\"\"DRILL: Choose / recurse / undo. Target: <= 2 minutes.\"\"\"\ndef subsets(nums):\n    res = []\n    path = []\n\n    def backtrack(i):\n        res.append(path.copy())\n        for j in range(i, len(nums)):\n            path.append(nums[j])\n            backtrack(j + 1)\n            path.pop()\n\n    backtrack(0)\n    return res\n\nout = subsets([1,2,3])\nassert len(out) == 8\nassert [] in out and [1,2,3] in out and [2] in out\nassert subsets([]) == [[]]\nprint(\"PASS\")\n"
+  },
+  {
     "drillId": "normal:binary_search",
     "source": "\"\"\"DRILL: Exact binary search. Target: <= 90 seconds.\"\"\"\ndef binary_search(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        middle = (left + right) // 2\n        if nums[middle] == target:\n            return middle\n        if nums[middle] < target:\n            left = middle + 1\n        else:\n            right = middle - 1\n    return -1\n\nassert binary_search([], 3) == -1\nassert binary_search([5], 5) == 0\nassert binary_search([1,3,5,7,9], 7) == 3\nassert binary_search([1,3,5,7,9], 4) == -1\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:binary_search_first_true",
+    "source": "\"\"\"DRILL: Binary search on answer / first True. Target: <= 2 minutes.\"\"\"\ndef first_true(lo, hi, condition):\n    ans = -1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if condition(mid):\n            ans = mid\n            hi = mid - 1\n        else:\n            lo = mid + 1\n    return ans\n\nassert first_true(0, 10, lambda x: x >= 6) == 6\nassert first_true(0, 0, lambda x: True) == 0\nassert first_true(0, 5, lambda x: False) == -1\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:fast_slow_pointers",
+    "source": "\"\"\"DRILL: Linked-list fast/slow pointers. Target: <= 2 minutes.\"\"\"\nclass ListNode:\n    def __init__(self, val, next=None):\n        self.val, self.next = val, next\n\ndef has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            return True\n    return False\n\na = ListNode(1); b = ListNode(2); c = ListNode(3)\na.next=b; b.next=c\nassert has_cycle(a) is False\nc.next=b\nassert has_cycle(a) is True\nassert has_cycle(None) is False\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:graph_bfs",
+    "source": "\"\"\"DRILL: Graph BFS adjacency list. Target: <= 90 seconds.\"\"\"\nfrom collections import deque\n\ndef bfs_distances(graph, start):\n    dist = {start: 0}\n    q = deque([start])\n    while q:\n        u = q.popleft()\n        for v in graph.get(u, []):\n            if v not in dist:\n                dist[v] = dist[u] + 1\n                q.append(v)\n    return dist\n\ng = {0:[1,2], 1:[3], 2:[3], 3:[], 4:[]}\nassert bfs_distances(g, 0) == {0:0,1:1,2:1,3:2}\nassert bfs_distances(g, 4) == {4:0}\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:graph_dfs",
+    "source": "\"\"\"DRILL: Graph DFS adjacency list. Target: <= 90 seconds.\"\"\"\ndef dfs(graph, start):\n    visited = set()\n    stack = [start]\n    while stack:\n        u = stack.pop()\n        if u in visited:\n            continue\n        visited.add(u)\n        for v in graph.get(u, []):\n            if v not in visited:\n                stack.append(v)\n    return visited\n\ng = {0:[1,2], 1:[2], 2:[3], 3:[], 4:[]}\nassert dfs(g, 0) == {0,1,2,3}\nassert dfs(g, 4) == {4}\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:grid_bfs",
+    "source": "\"\"\"DRILL: Grid BFS shortest path. Target: <= 3 minutes.\"\"\"\nfrom collections import deque\n\ndef shortest_path(grid, start, end):\n    if not grid or not grid[0]:\n        return -1\n    rows, cols = len(grid), len(grid[0])\n    sr, sc = start\n    er, ec = end\n    if grid[sr][sc] == 1 or grid[er][ec] == 1:\n        return -1\n    dist = [[-1] * cols for _ in range(rows)]\n    q = deque()\n    q.append((sr, sc))\n    dist[sr][sc] = 0\n    dirs = [(1,0),(-1,0),(0,1),(0,-1)]\n    while q:\n        r, c = q.popleft()\n        if (r, c) == (er, ec):\n            return dist[r][c]\n        for dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 0 and dist[nr][nc] == -1:\n                dist[nr][nc] = dist[r][c] + 1\n                q.append((nr, nc))\n    return -1\n\ng = [\n    [0,0,1],\n    [1,0,0],\n    [0,0,0],\n]\nassert shortest_path(g, (0,0), (2,2)) == 4\nassert shortest_path([[0,1],[1,0]], (0,0), (1,1)) == -1\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:grid_dfs",
+    "source": "\"\"\"DRILL: Grid DFS + visited. Target: <= 2 minutes.\"\"\"\ndef count_islands(grid):\n    if not grid or not grid[0]:\n        return 0\n    rows, cols = len(grid), len(grid[0])\n    visited = [[False]*cols for _ in range(rows)]\n\n    def dfs(r, c):\n        if r < 0 or r >= rows or c < 0 or c >= cols:\n            return\n        if grid[r][c] != \"1\" or visited[r][c]:\n            return\n        visited[r][c] = True\n        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)\n\n    count = 0\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == \"1\" and not visited[r][c]:\n                dfs(r,c)\n                count += 1\n    return count\n\nassert count_islands([\n    [\"1\",\"1\",\"0\"],\n    [\"0\",\"1\",\"0\"],\n    [\"1\",\"0\",\"1\"],\n]) == 3\nassert count_islands([]) == 0\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:heap_top_k",
+    "source": "\"\"\"DRILL: Heap / top-K. Target: <= 2 minutes.\"\"\"\nimport heapq\n\ndef k_largest(nums, k):\n    if k <= 0:\n        return []\n    heap = []\n    for x in nums:\n        if len(heap) < k:\n            heapq.heappush(heap, x)\n        elif x > heap[0]:\n            heapq.heapreplace(heap, x)\n    return sorted(heap, reverse=True)\n\nassert k_largest([3,2,1,5,6,4], 2) == [6,5]\nassert k_largest([1], 1) == [1]\nassert k_largest([4,4,2,9], 3) == [9,4,4]\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:insert_interval",
+    "source": "\"\"\"DRILL: Insert interval / three-position scan. Target: <= 2 minutes.\"\"\"\ndef insert_interval(intervals, new_interval):\n    res = []\n    i = 0\n    n = len(intervals)\n    # left: strictly before\n    while i < n and intervals[i][1] < new_interval[0]:\n        res.append(intervals[i])\n        i += 1\n    # merge overlapping\n    while i < n and intervals[i][0] <= new_interval[1]:\n        new_interval = [min(new_interval[0], intervals[i][0]), max(new_interval[1], intervals[i][1])]\n        i += 1\n    res.append(new_interval)\n    # right\n    while i < n:\n        res.append(intervals[i])\n        i += 1\n    return res\n\nassert insert_interval([], [2,5]) == [[2,5]]\nassert insert_interval([[1,3],[6,9]], [2,5]) == [[1,5],[6,9]]\nassert insert_interval([[1,2],[3,5],[6,7],[8,10],[12,16]], [4,8]) == [[1,2],[3,10],[12,16]]\nassert insert_interval([[1,5]], [6,8]) == [[1,5],[6,8]]\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:interval_intersection",
+    "source": "\"\"\"DRILL: Interval intersection / two sorted lists. Target: <= 2 minutes.\"\"\"\ndef interval_intersection(a, b):\n    i = j = 0\n    res = []\n    while i < len(a) and j < len(b):\n        lo = max(a[i][0], b[j][0])\n        hi = min(a[i][1], b[j][1])\n        if lo <= hi:\n            res.append([lo, hi])\n        if a[i][1] < b[j][1]:\n            i += 1\n        else:\n            j += 1\n    return res\n\nassert interval_intersection([], [[1,3]]) == []\nassert interval_intersection([[1,3]], []) == []\nassert interval_intersection([[0,2],[5,10],[13,23],[24,25]], [[1,5],[8,12],[15,24],[25,26]]) == [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]\nassert interval_intersection([[1,7]], [[3,10]]) == [[3,7]]\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:linked_list_reverse",
+    "source": "\"\"\"DRILL: Iterative linked-list reversal. Target: <= 90 seconds.\"\"\"\nclass ListNode:\n    def __init__(self, val, next=None):\n        self.val, self.next = val, next\n\ndef reverse(head):\n    prev = None\n    cur = head\n    while cur:\n        nxt = cur.next\n        cur.next = prev\n        prev = cur\n        cur = nxt\n    return prev\n\ndef vals(head):\n    out = []\n    while head:\n        out.append(head.val); head = head.next\n    return out\n\nh = ListNode(1, ListNode(2, ListNode(3)))\nassert vals(reverse(h)) == [3,2,1]\nassert reverse(None) is None\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:merge_intervals",
+    "source": "\"\"\"DRILL: Merge intervals / overlap scan. Target: <= 2 minutes.\"\"\"\ndef merge_intervals(intervals):\n    if not intervals:\n        return []\n    intervals = sorted(intervals, key=lambda x: x[0])\n    res = [intervals[0][:]]\n    for s, e in intervals[1:]:\n        if s <= res[-1][1]:\n            res[-1][1] = max(res[-1][1], e)\n        else:\n            res.append([s, e])\n    return res\n\nassert merge_intervals([]) == []\nassert merge_intervals([[1,3]]) == [[1,3]]\nassert merge_intervals([[1,3],[2,6],[8,10],[15,18]]) == [[1,6],[8,10],[15,18]]\nassert merge_intervals([[1,4],[4,5]]) == [[1,5]]\nassert merge_intervals([[5,7],[1,2],[2,4]]) == [[1,4],[5,7]]\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:monotonic_stack",
+    "source": "\"\"\"DRILL: Monotonic stack. Target: <= 2 minutes.\"\"\"\ndef next_greater(nums):\n    n = len(nums)\n    ans = [-1] * n\n    stack = []  # indices with decreasing values\n    for i, x in enumerate(nums):\n        while stack and nums[stack[-1]] < x:\n            ans[stack.pop()] = x\n        stack.append(i)\n    return ans\n\nassert next_greater([2,1,2,4,3]) == [4,2,4,-1,-1]\nassert next_greater([5,4,3]) == [-1,-1,-1]\nassert next_greater([]) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:prefix_sum_hashmap",
+    "source": "\"\"\"DRILL: Prefix sum + frequency hashmap. Target: <= 2 minutes.\"\"\"\nfrom collections import defaultdict\n\ndef subarray_sum(nums, k):\n    count = 0\n    prefix = 0\n    freq = defaultdict(int)\n    freq[0] = 1\n    for x in nums:\n        prefix += x\n        count += freq[prefix - k]\n        freq[prefix] += 1\n    return count\n\nassert subarray_sum([1,1,1], 2) == 2\nassert subarray_sum([1,2,3], 3) == 2\nassert subarray_sum([1,-1,0], 0) == 3\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:sliding_window_fixed",
+    "source": "\"\"\"DRILL: Fixed-size sliding window. Target: <= 90 seconds.\"\"\"\ndef max_sum_k(nums, k):\n    if k <= 0 or not nums or k > len(nums):\n        # drill guarantees valid k; fallback keeps function total\n        return max(nums) if nums else 0\n    window = sum(nums[:k])\n    best = window\n    for i in range(k, len(nums)):\n        window += nums[i] - nums[i - k]\n        if window > best:\n            best = window\n    return best\n\nassert max_sum_k([1,4,2,10,2,3,1,0,20], 4) == 24\nassert max_sum_k([5], 1) == 5\nassert max_sum_k([-5,-2,-8], 2) == -7\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:sliding_window_variable",
+    "source": "\"\"\"DRILL: Variable sliding window. Target: <= 2 minutes.\"\"\"\ndef longest_unique(s):\n    last = {}\n    left = 0\n    best = 0\n    for right, ch in enumerate(s):\n        if ch in last and last[ch] >= left:\n            left = last[ch] + 1\n        last[ch] = right\n        best = max(best, right - left + 1)\n    return best\n\nassert longest_unique(\"\") == 0\nassert longest_unique(\"abcabcbb\") == 3\nassert longest_unique(\"bbbbb\") == 1\nassert longest_unique(\"pwwkew\") == 3\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:topological_sort",
+    "source": "\"\"\"DRILL: Kahn topological sort. Target: <= 3 minutes.\"\"\"\nfrom collections import deque, defaultdict\n\ndef topo_sort(n, edges):\n    graph = defaultdict(list)\n    indeg = [0] * n\n    for u, v in edges:\n        graph[u].append(v)\n        indeg[v] += 1\n    q = deque([i for i in range(n) if indeg[i] == 0])\n    order = []\n    while q:\n        u = q.popleft()\n        order.append(u)\n        for v in graph[u]:\n            indeg[v] -= 1\n            if indeg[v] == 0:\n                q.append(v)\n    return order if len(order) == n else []\n\norder = topo_sort(4, [(0,1),(0,2),(1,3),(2,3)])\nassert len(order) == 4\npos = {x:i for i,x in enumerate(order)}\nassert pos[0] < pos[1] and pos[0] < pos[2]\nassert pos[1] < pos[3] and pos[2] < pos[3]\nassert topo_sort(2, [(0,1),(1,0)]) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:tree_iterative_dfs",
+    "source": "\"\"\"DRILL: Iterative tree DFS with stack. Target: <= 2 minutes.\"\"\"\nclass Node:\n    def __init__(self, val, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\ndef preorder(root):\n    if not root:\n        return []\n    stack = [root]\n    res = []\n    while stack:\n        node = stack.pop()\n        res.append(node.val)\n        if node.right:\n            stack.append(node.right)\n        if node.left:\n            stack.append(node.left)\n    return res\n\nroot = Node(1, Node(2, Node(4), Node(5)), Node(3))\nassert preorder(root) == [1,2,4,5,3]\nassert preorder(None) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:tree_level_order_bfs",
+    "source": "\"\"\"DRILL: Tree level-order BFS. Target: <= 2 minutes.\"\"\"\nfrom collections import deque\n\nclass Node:\n    def __init__(self, val, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\ndef level_order(root):\n    if not root:\n        return []\n    q = deque([root])\n    res = []\n    while q:\n        level = []\n        for _ in range(len(q)):\n            node = q.popleft()\n            level.append(node.val)\n            if node.left:\n                q.append(node.left)\n            if node.right:\n                q.append(node.right)\n        res.append(level)\n    return res\n\nroot = Node(1, Node(2, Node(4)), Node(3))\nassert level_order(root) == [[1],[2,3],[4]]\nassert level_order(None) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:tree_recursive_dfs",
+    "source": "\"\"\"DRILL: Recursive tree DFS. Target: <= 90 seconds.\"\"\"\nclass Node:\n    def __init__(self, val, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\ndef preorder(root):\n    res = []\n    def dfs(node):\n        if not node:\n            return\n        res.append(node.val)\n        dfs(node.left)\n        dfs(node.right)\n    dfs(root)\n    return res\n\nroot = Node(1, Node(2, Node(4), Node(5)), Node(3))\nassert preorder(root) == [1,2,4,5,3]\nassert preorder(None) == []\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:trie",
+    "source": "\"\"\"DRILL: Trie insert/search/prefix. Target: <= 4 minutes.\"\"\"\nclass TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word):\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            node = node.children[ch]\n        node.is_end = True\n\n    def search(self, word):\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return node.is_end\n\n    def starts_with(self, prefix):\n        node = self.root\n        for ch in prefix:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return True\n\nt = Trie()\nt.insert(\"apple\")\nassert t.search(\"apple\") is True\nassert t.search(\"app\") is False\nassert t.starts_with(\"app\") is True\nt.insert(\"app\")\nassert t.search(\"app\") is True\nprint(\"PASS\")\n"
+  },
+  {
+    "drillId": "normal:two_pointers",
+    "source": "\"\"\"DRILL: Opposite-direction two pointers. Target: <= 90 seconds.\"\"\"\ndef pair_sum_sorted(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo < hi:\n        s = nums[lo] + nums[hi]\n        if s == target:\n            return (lo, hi)\n        elif s < target:\n            lo += 1\n        else:\n            hi -= 1\n    return None\n\nassert pair_sum_sorted([1,2,4,7,11], 9) == (1,3)\nassert pair_sum_sorted([1,2], 10) is None\nassert pair_sum_sorted([-3,-1,2,5], 1) == (1,2)\nprint(\"PASS\")\n"
   }
 ]
